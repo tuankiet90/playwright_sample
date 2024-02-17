@@ -1,0 +1,17 @@
+{
+  "name": "playwright-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "html-react-parser": "^3.0.16",
+    "mongoose": "^8.1.2",
+    "playwright": "^1.19.2",
+    "react": "^18.2.0"
+  }
+}
