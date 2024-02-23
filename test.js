@@ -323,12 +323,32 @@ async function start() {
 
 //start();
 
-async function json() {
-  const users = await userModel.find();
+// async function json() {
+//   const users = await userModel.find();
 
-  const data = { users };
-  var fs = require("fs");
-  fs.writeFileSync("users.json", JSON.stringify(data, null, 4));
+//   const data = { users };
+//   var fs = require("fs");
+//   fs.writeFileSync("users.json", JSON.stringify(data, null, 4));
+// }
+
+// json()
+
+async function exportExcel() {
+  const users = await userModel.find().sort({ rank_mean: 1 }).limit(5000);
+  var Excel = require("exceljs");
+  var workbook = new Excel.Workbook();
+  var worksheet = workbook.addWorksheet("users");
+  const columns = [];
+  userModel.schema.eachPath(function (path) {
+    console.log(path);
+    columns.push({ header: path, key: path, width: 50 });
+  });
+  worksheet.columns = columns;
+  for (const user of users) {
+    worksheet.addRow(user);
+  }
+
+  workbook.xlsx.writeFile("./users.csv").then(() => console.log("File saved!"));
 }
 
-json()
+exportExcel();

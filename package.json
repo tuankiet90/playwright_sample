@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethers": "^6.11.1",
+    "exceljs": "^4.4.0",
     "html-react-parser": "^3.0.16",
     "mongoose": "^8.1.2",
     "playwright": "^1.19.2",
