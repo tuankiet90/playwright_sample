@@ -99,7 +99,6 @@ async function read() {
               .replace(`https://debank.com/profile/`, "")
               .split("/")[0];
 
-            await pages[1].close();
           } catch (error) {
             console.log(error.message);
           }
