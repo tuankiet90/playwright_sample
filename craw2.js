@@ -55,7 +55,7 @@ async function read() {
       const web = await browser.newPage();
       console.log({ link, page, total });
       await web.goto(link);
-      await delay(3);
+      await delay(5);
 
       await web.screenshot({ path: "xxxxxx.png" });
       const rows = await web.locator(".db-table-row").all();
@@ -91,7 +91,7 @@ async function read() {
           // }
           try {
             await row.locator(".db-user-avatar-container-wrapper").click();
-            await delay(2);
+            await delay(5);
             const pages = await web.context().pages();
 
             profile_url = await pages[1].url();
