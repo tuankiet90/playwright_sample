@@ -4,7 +4,7 @@ const link = "https://dune.com/cryptokoryo/friendtech";
 const mongoose = require(`mongoose`);
 const { isAddress } = require("ethers");
 const connectString =
-  "mongodb://127.0.0.1:27000,127.0.0.1:27001,127.0.0.1:27002/debank&replicaSet=rs0";
+  "mongodb+srv://amm:C6n719Sk5V3Kc8s4@db-mongodb-sgp1-rasset-fb6a1567.mongo.ondigitalocean.com/amm?tls=true&authSource=admin&replicaSet=db-mongodb-sgp1-rasset";
 mongoose.connect(connectString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -51,13 +51,13 @@ async function read() {
   //xxx
   while (isContinue) {
     try {
-
       let link = `https://debank.com/ranking?page=${page}`;
       const web = await browser.newPage();
       console.log({ link, page, total });
       await web.goto(link);
       await delay(3);
 
+      await web.screenshot({ path: "xxxxxx.png" });
       const rows = await web.locator(".db-table-row").all();
       for (const row of rows) {
         total++;
@@ -67,15 +67,42 @@ async function read() {
         const net_worth = texts[2];
         const tvf = texts[3];
         const followers = +texts[4];
+        let address,
+          profile_url = "";
         const imgStr = (
           await row.locator(`.db-user-avatar-container`).first().innerHTML()
         ).toString();
-        const address = imgStr
+        address = imgStr
           .replace(`<img src="https://static.debank.com/image/user/logo/`, "")
           .split("/")[0];
-        let profile_url = "";
-        if (isAddress(address)) {
+        profile_url = "";
+        if (address && isAddress(address)) {
           profile_url = `https://debank.com/profile/${address}`;
+        } else {
+          // const cells = await row.locator(".db-table-cell").all();
+
+          // if (user == "nerd") {
+          //   await row.locator(".db-user-avatar-container-wrapper").hover();
+          //   await delay(2);
+          //   await web.screenshot({ path: `${user}.png` });
+          //   await row.locator(".db-user-avatar-container-wrapper").click();
+          //   isContinue = false;
+          //   process.exit();
+          // }
+          try {
+            await row.locator(".db-user-avatar-container-wrapper").click();
+            await delay(2);
+            const pages = await web.context().pages();
+
+            profile_url = await pages[1].url();
+            address = profile_url
+              .replace(`https://debank.com/profile/`, "")
+              .split("/")[0];
+
+            await pages[1].close();
+          } catch (error) {
+            console.log(error.message);
+          }
         }
 
         // console.log({ rank, user, net_worth, tvf, followers });
@@ -113,7 +140,7 @@ async function start() {
   }
 }
 
-//start();
+start();
 
 // async function json() {
 //   const users = await userModel.find();
@@ -140,7 +167,9 @@ async function exportExcel() {
     worksheet.addRow(user);
   }
 
-  workbook.xlsx.writeFile("./users-debank.csv").then(() => console.log("File saved!"));
+  workbook.xlsx
+    .writeFile("./users-debank.csv")
+    .then(() => console.log("File saved!"));
 }
 
-exportExcel();
+//exportExcel();

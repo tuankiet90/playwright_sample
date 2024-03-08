@@ -74,7 +74,7 @@ async function start() {
   }
 }
 
-//start();
+start();
 
 // async function json() {
 //   const users = await userModel.find();
@@ -104,4 +104,4 @@ async function exportExcel() {
   workbook.xlsx.writeFile("./users-degenscore.csv").then(() => console.log("File saved!"));
 }
 
-exportExcel();
+//exportExcel();
