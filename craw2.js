@@ -4,7 +4,7 @@ const link = "https://dune.com/cryptokoryo/friendtech";
 const mongoose = require(`mongoose`);
 const { isAddress } = require("ethers");
 const connectString =
-  "mongodb+srv://amm:C6n719Sk5V3Kc8s4@db-mongodb-sgp1-rasset-fb6a1567.mongo.ondigitalocean.com/amm?tls=true&authSource=admin&replicaSet=db-mongodb-sgp1-rasset";
+"mongodb+srv://amm:C6n719Sk5V3Kc8s4@db-mongodb-sgp1-rasset-fb6a1567.mongo.ondigitalocean.com/amm?tls=true&authSource=admin&replicaSet=db-mongodb-sgp1-rasset";
 mongoose.connect(connectString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -35,9 +35,9 @@ const waitMs = (msDuration) => {
   });
 };
 
-const delay = async (time) => {
+const delay = async (time,text="") => {
   for (let i = 0; i <= time; i++) {
-    console.log(`wait....${i}`);
+    console.log(`wait ${text}....${i}`);
     await waitMs(1000);
   }
 };
@@ -55,7 +55,7 @@ async function read() {
       const web = await browser.newPage();
       console.log({ link, page, total });
       await web.goto(link);
-      await delay(10);
+      await delay(10,'load page');
 
       await web.screenshot({ path: "xxxxxx.png" });
       const rows = await web.locator(".db-table-row").all();
@@ -91,7 +91,7 @@ async function read() {
           // }
           try {
             await row.locator(".db-user-avatar-container-wrapper").click();
-            await delay(5);
+            await delay(5,'row ');
             const pages = await web.context().pages();
 
             profile_url = await pages[1].url();
@@ -122,6 +122,7 @@ async function read() {
       }
       await web.close();
       page++;
+      await delay(60,` next page `)
     } catch (error) {
       console.log(error);
     }
