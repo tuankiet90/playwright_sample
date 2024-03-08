@@ -55,7 +55,7 @@ async function read() {
       const web = await browser.newPage();
       console.log({ link, page, total });
       await web.goto(link);
-      await delay(5);
+      await delay(10);
 
       await web.screenshot({ path: "xxxxxx.png" });
       const rows = await web.locator(".db-table-row").all();
